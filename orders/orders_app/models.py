@@ -21,7 +21,7 @@ USER_TYPE_CHOICES = (
 class User(models.Model):
     name = models.CharField(max_length=50, verbose_name='Имя пользователя')
     type = models.CharField(verbose_name='Тип пользователя', choices=USER_TYPE_CHOICES, max_length=5, default='buyer')
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(max_length=70, blank=True, unique=True)
 
     def __str__(self):
         return f'{self.name}'
