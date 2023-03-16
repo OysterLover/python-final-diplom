@@ -83,7 +83,8 @@ class ProductInfo(models.Model):
     shop = models.ForeignKey(Shop, verbose_name='Магазин', related_name='product_infos', blank=True,
                              on_delete=models.CASCADE)
 
-    name = #как протащить
+    #name = #как протащить
+    model = models.CharField(max_length=80, verbose_name='Модель')
     quantity = models.PositiveIntegerField(verbose_name='Количество')
     price = models.PositiveIntegerField(verbose_name='Цена')
     price_rrc = models.PositiveIntegerField(verbose_name='Рекомендуемая розничная цена')
@@ -93,7 +94,6 @@ class ProductInfo(models.Model):
         verbose_name_plural = "Информационный список о продуктах"
 
 
-#что это
 class Parameter(models.Model):
     name = models.CharField(max_length=40, verbose_name='Название')
 
@@ -150,11 +150,11 @@ class OrderItem(models.Model):
 
 # нужно ли это вообще, если есть имейл
 class Contact(models.Model):
-    type = # что это
+    #type = # что это
     user = models.ForeignKey(User, verbose_name='Пользователь',
                              related_name='contacts', blank=True,
                              on_delete=models.CASCADE)
-    value = # что это
+    #value = # что это
 
     class Meta:
         verbose_name = 'Контакты пользователя'
