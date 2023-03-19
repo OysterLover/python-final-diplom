@@ -148,13 +148,11 @@ class OrderItem(models.Model):
         verbose_name_plural = "Список заказанных позиций"
 
 
-# нужно ли это вообще, если есть имейл
 class Contact(models.Model):
-    #type = # что это
+    address = models.CharField(verbose_name='Адрес', max_length=200)
     user = models.ForeignKey(User, verbose_name='Пользователь',
                              related_name='contacts', blank=True,
                              on_delete=models.CASCADE)
-    #value = # что это
 
     class Meta:
         verbose_name = 'Контакты пользователя'
