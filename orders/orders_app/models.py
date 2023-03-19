@@ -38,7 +38,6 @@ class Shop(models.Model):
     user = models.OneToOneField(User, verbose_name='Пользователь',
                                 blank=True, null=True,
                                 on_delete=models.CASCADE)
-    # что это
     filename = models.CharField(max_length=50, verbose_name='Filename')
 
     class Meta:
@@ -82,8 +81,6 @@ class ProductInfo(models.Model):
                                 on_delete=models.CASCADE)
     shop = models.ForeignKey(Shop, verbose_name='Магазин', related_name='product_infos', blank=True,
                              on_delete=models.CASCADE)
-
-    #name = #как протащить
     model = models.CharField(max_length=80, verbose_name='Модель')
     quantity = models.PositiveIntegerField(verbose_name='Количество')
     price = models.PositiveIntegerField(verbose_name='Цена')
@@ -104,6 +101,7 @@ class Parameter(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class ProductParameter(models.Model):
     product_info = models.ForeignKey(ProductInfo, verbose_name='Информация о продукте',
