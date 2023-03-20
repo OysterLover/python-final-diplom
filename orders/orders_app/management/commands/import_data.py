@@ -2,8 +2,7 @@ import yaml
 from yaml.loader import SafeLoader
 
 from django.core.management.base import BaseCommand
-from orders.orders_app.models import Shop, Category, Product, ProductInfo, Parameter, \
-    ProductParameter
+from orders_app.models import Shop, Category, Product, ProductInfo, Parameter, ProductParameter
 
 
 class Command(BaseCommand):
@@ -15,26 +14,27 @@ class Command(BaseCommand):
         with open(file_name, 'r', encoding='utf-8') as file:
             data = yaml.load(file, Loader=SafeLoader)
 
-        shop = Shop.objects.create(name=data['shop'],)
+        shop, _ = Shop.objects.update_or_create(name=data['shop'],)
 
         for item in data['categories']:
-            category = Category.objects.create(
+            category, _ = Category.objects.update_or_create(
                 id=item['id'],
                 name=item['name'],
             )
             category.shops.add(shop.id)
+            category.save()
 
         for item in data['goods']:
-            product = Product.objects.create(
+            product, _ = Product.objects.update_or_create(
                 id=item['id'],
-                category=item['category'],
+                category_id=item['category'],
+                name=item['name']
                 #достаточно ли этого для category, если это foreign key?
             )
 
-            product_info = ProductInfo.objects.create(
-                product=product.id,
-                shop=shop.id,
-                name=product.name,
+            product_info, _ = ProductInfo.objects.update_or_create(
+                product_id=product.id,
+                shop_id=shop.id,
                 model=item['model'],
                 quantity=item['quantity'],
                 price=item['price'],
@@ -42,7 +42,7 @@ class Command(BaseCommand):
             )
 
             for name, value in item['parameters'].items():
-                parameter = Parameter.objects.create(name=name)
-                ProductParameter.objects.create(product_info=product_info.id,
-                                                parameter=parameter.id,
+                parameter, _ = Parameter.objects.update_or_create(name=name)
+                ProductParameter.objects.create(product_info_id=product_info.id,
+                                                parameter_id=parameter.id,
                                                 value=value)

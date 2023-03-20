@@ -74,10 +74,11 @@ WSGI_APPLICATION = 'orders.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'orders_app_db',
+        'NAME': 'orders3',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
     }
