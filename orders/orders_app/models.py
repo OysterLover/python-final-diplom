@@ -1,7 +1,5 @@
 from django.db import models
 
-
-
 STATUS_CHOICES = (
     ('basket', 'Статус корзины'),
     ('new', 'Новый'),
@@ -16,6 +14,7 @@ USER_TYPE_CHOICES = (
     ('shop', 'Магазин'),
     ('buyer', 'Покупатель'),
 )
+
 
 # почему не прописана в тз эта модель
 class User(models.Model):
@@ -33,7 +32,7 @@ class User(models.Model):
 
 
 class Shop(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Название')
+    name = models.CharField(max_length=40, verbose_name='Название')
     url = models.URLField(verbose_name='Ссылка', null=True, blank=True)
     user = models.OneToOneField(User, verbose_name='Пользователь',
                                 blank=True, null=True,
@@ -136,8 +135,8 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, verbose_name='Заказ', related_name='ordered_items', blank=True,
                               on_delete=models.CASCADE)
     product = models.ForeignKey(ProductInfo, verbose_name='Информация о продукте', related_name='ordered_items',
-                                     blank=True,
-                                     on_delete=models.CASCADE)
+                                blank=True,
+                                on_delete=models.CASCADE)
     shop = models.ForeignKey(Shop, verbose_name="Магазин", related_name='ordered_items', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='Количество')
 
