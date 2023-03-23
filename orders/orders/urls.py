@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.routers import DefaultRouter
+
+from orders_app.views import ProductInfoViewSet
+
+r = DefaultRouter()
+r.register('products', ProductInfoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+] + r.urls
