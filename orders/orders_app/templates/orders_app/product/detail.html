@@ -1,0 +1,29 @@
+{% extends "orders_app/base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ product.name }}
+{% endblock %}
+{% block content %}
+  <div class="product-detail">
+    <h1>{{ product.name }}</h1>
+
+    {% for product_info in product.product_infos.all %}
+      <h3>Модель: {{ product_info.model }}</h3>
+            {% for product_parameter in product_info.product_parameters.all %}
+                <h4>{{ product_parameter.parameter }} : {{ product_parameter.value }}</h4>
+            {% endfor %}
+        <p class="price">₽{{ product_info.price }}</p>
+    {% endfor %}
+    <form action="{% url "cart:cart_add" product.id %}" method="post">
+      {{ cart_product_form }}
+      {% csrf_token %}
+      <input type="submit" value="Add to cart">
+    </form>
+      <h2>
+      <a href="{{ product.category.get_absolute_url }}">
+        {{ product.category }}
+      </a>
+    </h2>
+  </div>
+{% endblock %}

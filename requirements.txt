@@ -2,3 +2,10 @@ Django==4.1.7
 pytz==2018.5
 PyYAML~=6.0
 djangorestframework~=3.14.0
+pytils~=0.4.1
+pip~=23.0.1
+wheel~=0.36.2
+asgiref~=3.6.0
+sqlparse~=0.4.3
+setuptools~=57.0.0
+django-nested-inline~=0.4.6

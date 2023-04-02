@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
 
 STATUS_CHOICES = (
     ('basket', 'Статус корзины'),
@@ -16,7 +18,6 @@ USER_TYPE_CHOICES = (
 )
 
 
-# почему не прописана в тз эта модель
 class User(models.Model):
     name = models.CharField(max_length=50, verbose_name='Имя пользователя')
     type = models.CharField(verbose_name='Тип пользователя', choices=USER_TYPE_CHOICES, max_length=5, default='buyer')
@@ -51,8 +52,12 @@ class Shop(models.Model):
 class Category(models.Model):
     shops = models.ManyToManyField(Shop, verbose_name='Магазины', related_name='categories', blank=True)
     name = models.CharField(max_length=40, verbose_name='Название')
+    slug = models.SlugField(max_length=200, null=True)
 
     class Meta:
+        indexes = [
+            models.Index(fields=['name']),
+        ]
         verbose_name = 'Категория'
         verbose_name_plural = "Список категорий"
         ordering = ('-name',)
@@ -60,11 +65,15 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('orders_app:product_list_by_category', args=[self.slug])
+
 
 class Product(models.Model):
     category = models.ForeignKey(Category, verbose_name='Категория', related_name='products', blank=True,
                                  on_delete=models.CASCADE)
     name = models.CharField(max_length=80, verbose_name='Название')
+    slug = models.SlugField(max_length=200, null=True)
 
     class Meta:
         verbose_name = 'Продукт'
@@ -73,6 +82,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('orders_app:product_detail', args=[self.id, self.slug])
 
 
 class ProductInfo(models.Model):
@@ -115,42 +127,42 @@ class ProductParameter(models.Model):
         verbose_name_plural = "Список параметров"
 
 
-class Order(models.Model):
-    user = models.ForeignKey(User, verbose_name='Пользователь',
-                             related_name='orders', blank=True,
-                             on_delete=models.CASCADE)
-    dt = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(verbose_name='Статус', choices=STATUS_CHOICES, max_length=15)
-
-    class Meta:
-        verbose_name = 'Заказ'
-        verbose_name_plural = "Список заказов"
-        ordering = ('-dt',)
-
-    def __str__(self):
-        return str(self.dt)
-
-
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, verbose_name='Заказ', related_name='ordered_items', blank=True,
-                              on_delete=models.CASCADE)
-    product = models.ForeignKey(ProductInfo, verbose_name='Информация о продукте', related_name='ordered_items',
-                                blank=True,
-                                on_delete=models.CASCADE)
-    shop = models.ForeignKey(Shop, verbose_name="Магазин", related_name='ordered_items', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(verbose_name='Количество')
-
-    class Meta:
-        verbose_name = 'Заказанная позиция'
-        verbose_name_plural = "Список заказанных позиций"
-
-
-class Contact(models.Model):
-    address = models.CharField(verbose_name='Адрес', max_length=200)
-    user = models.ForeignKey(User, verbose_name='Пользователь',
-                             related_name='contacts', blank=True,
-                             on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = 'Контакты пользователя'
-        verbose_name_plural = "Список контактов пользователя"
+# class Order(models.Model):
+#     user = models.ForeignKey(User, verbose_name='Пользователь',
+#                              related_name='orders', blank=True,
+#                              on_delete=models.CASCADE)
+#     dt = models.DateTimeField(auto_now_add=True)
+#     status = models.CharField(verbose_name='Статус', choices=STATUS_CHOICES, max_length=15)
+#
+#     class Meta:
+#         verbose_name = 'Заказ'
+#         verbose_name_plural = "Список заказов"
+#         ordering = ('-dt',)
+#
+#     def __str__(self):
+#         return str(self.dt)
+#
+#
+# class OrderItem(models.Model):
+#     order = models.ForeignKey(Order, verbose_name='Заказ', related_name='ordered_items', blank=True,
+#                               on_delete=models.CASCADE)
+#     product = models.ForeignKey(ProductInfo, verbose_name='Информация о продукте', related_name='ordered_items',
+#                                 blank=True,
+#                                 on_delete=models.CASCADE)
+#     shop = models.ForeignKey(Shop, verbose_name="Магазин", related_name='ordered_items', on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField(verbose_name='Количество')
+#
+#     class Meta:
+#         verbose_name = 'Заказанная позиция'
+#         verbose_name_plural = "Список заказанных позиций"
+#
+#
+# class Contact(models.Model):
+#     address = models.CharField(verbose_name='Адрес', max_length=200)
+#     user = models.ForeignKey(User, verbose_name='Пользователь',
+#                              related_name='contacts', blank=True,
+#                              on_delete=models.CASCADE)
+#
+#     class Meta:
+#         verbose_name = 'Контакты пользователя'
+#         verbose_name_plural = "Список контактов пользователя"

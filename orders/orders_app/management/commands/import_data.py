@@ -1,5 +1,6 @@
 import yaml
 from yaml.loader import SafeLoader
+from pytils.translit import slugify
 
 from django.core.management.base import BaseCommand
 from orders_app.models import Shop, Category, Product, ProductInfo, Parameter, ProductParameter
@@ -20,6 +21,7 @@ class Command(BaseCommand):
             category, _ = Category.objects.update_or_create(
                 id=item['id'],
                 name=item['name'],
+                slug=slugify(item['name'])
             )
             category.shops.add(shop.id)
             category.save()
@@ -28,8 +30,9 @@ class Command(BaseCommand):
             product, _ = Product.objects.update_or_create(
                 id=item['id'],
                 category_id=item['category'],
-                name=item['name']
-                #достаточно ли этого для category, если это foreign key?
+                name=item['name'],
+                slug=slugify(item['name'])
+
             )
 
             product_info, _ = ProductInfo.objects.update_or_create(

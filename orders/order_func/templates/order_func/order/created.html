@@ -1,0 +1,11 @@
+{% extends "orders_app/base.html" %}
+
+{% block title %}
+  Спасибо!
+{% endblock %}
+
+{% block content %}
+  <h1>Спасибо!</h1>
+  <p>Ваш заказ был успешно размещён. Вашему заказу присвоен номер
+  <strong>{{ order.id }}</strong>.</p>
+{% endblock %}

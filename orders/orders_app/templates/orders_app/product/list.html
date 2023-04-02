@@ -1,0 +1,36 @@
+{% extends "orders_app/base.html" %}
+{% load static %}
+
+{% block title %}
+  {% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+  <div id="sidebar">
+    <h3>Категории</h3>
+    <ul>
+      <li {% if not category %}class="selected"{% endif %}>
+        <a href="{% url "orders_app:product_list" %}">All</a>
+      </li>
+      {% for c in categories %}
+        <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+          <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div id="main" class="product-list">
+    <h1>{% if category %}{{ category.name }}{% else %}Товары{% endif %}</h1>
+    {% for product in products %}
+      <div class="item">
+        <a href="{{ product.get_absolute_url }}">
+        </a>
+        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+        <br>
+        {% for product_info in product.product_infos.all %}
+          <p class="price">₽{{ product_info.price }}</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
