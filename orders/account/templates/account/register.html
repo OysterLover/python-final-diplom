@@ -1,0 +1,13 @@
+{% extends "orders_app/base.html" %}
+
+{% block title %}Создать аккаунт{% endblock %}
+
+{% block content %}
+ <h1>Создать аккаунт</h1>
+ <p>Пожалуйста, заполните форму:</p>
+ <form method="post">
+    {{ user_form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Создать мой аккаунт"></p>
+ </form>
+{% endblock %}

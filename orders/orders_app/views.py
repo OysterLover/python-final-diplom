@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
@@ -13,6 +14,7 @@ from cart.forms import CartAddProductForm
 #     queryset = ProductInfo.objects.all()
 #     serializer_class = ProductInfoSerializer
 
+@login_required
 def product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
