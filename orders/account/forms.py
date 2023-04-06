@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 
 class LoginForm(forms.Form):
@@ -12,6 +12,7 @@ class UserRegistrationForm(forms.ModelForm):
                                widget=forms.PasswordInput)
     password2 = forms.CharField(label='Repeat password',
                                 widget=forms.PasswordInput)
+    groups = forms.ModelChoiceField(queryset=Group.objects.all())
 
     class Meta:
         model = User
