@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User, Group
 
+from orders_app.models import Shop
+
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -12,11 +14,12 @@ class UserRegistrationForm(forms.ModelForm):
                                widget=forms.PasswordInput)
     password2 = forms.CharField(label='Repeat password',
                                 widget=forms.PasswordInput)
+    # groups = forms.ModelChoiceField(queryset=Group.objects.all())
     groups = forms.ModelChoiceField(queryset=Group.objects.all())
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'email', 'is_staff', 'groups')
+        fields = ('username', 'first_name', 'email', 'is_staff')
 
     def clean_password2(self):
         cd = self.cleaned_data

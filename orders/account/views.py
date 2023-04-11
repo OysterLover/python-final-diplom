@@ -21,12 +21,11 @@ def register(request):
             # Set the chosen password
             new_user.set_password(user_form.cleaned_data['password'])
 
-            # new_user.groups.set(user_form.cleaned_data['groups'])
-            # Save the User object
             new_user.save()
-            # groups = Group.objects.get(name=user_form.cleaned_data['groups'])
-            # new_user.groups.set(user_form.cleaned_data['groups'])
-            # new_user.save()
+
+            # specifically assign many-to-many fields after saving object
+            new_user.groups.add(user_form.cleaned_data['groups'])
+
             return render(request,
                           'account/register_done.html',
                           {'new_user': new_user})
