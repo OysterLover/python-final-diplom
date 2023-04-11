@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -25,6 +26,21 @@ def register(request):
 
             # specifically assign many-to-many fields after saving object
             new_user.groups.add(user_form.cleaned_data['groups'])
+
+            # sending registration notification
+
+            subject = 'Уведомление о регистрации на платформе'
+            message = f'Вы успешно зарегистрировались!'
+            from_email = 'olesynikitina@gmail.com'
+            to_email = user_form.cleaned_data['email']
+
+            send_mail(
+                subject,
+                message,
+                from_email,
+                [to_email],
+                fail_silently=False,
+            )
 
             return render(request,
                           'account/register_done.html',
